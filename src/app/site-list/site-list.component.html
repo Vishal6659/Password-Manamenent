@@ -3,47 +3,56 @@
     <p class="mb-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati harum quis maiores quas delectus vitae nemo laborum reiciendis. Fugit, impedit.</p>
     <button class="mb-5 mx-0.5 px-5 py-3 text-sm bg-gray-900 text-white shadow rounded-md">Add New Site</button>
 
+    <!-- Alert -->
+    
+    <div *ngIf="isSuccess" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
+        <p class="font-bold">{{successMessage}}</p>        
+      </div>
+
+
     <!-- Add New Site Form -->
     <div class="px-20 py-10 mb-10 my-5 border-2 border-gray-900">
-        <h2 class="text-3xl text-center"> Add New Site</h2>
+        <h2 class="text-3xl text-center"> {{formState}} Site</h2>
         <p class="text-center"> You can add new site from the form below. </p>
         <form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
             <div class="flex flex-col">
                 <label class="text-lg font-medium mb-2"> Site Name </label>
-                <input ngModel type="text" name="siteName" class="border-2 border-gray-900 p-2 rounded-lg w-full">
+                <input [(ngModel)]='siteName' type="text" name="siteName" class="border-2 border-gray-900 p-2 rounded-lg w-full">
             </div>
 
             <div class="flex flex-col mt-2">
                 <label class="text-lg font-medium mb-2"> Site URL </label>
-                <input ngModel type="text" name="siteUrl" class="border-2 border-gray-900 p-2 rounded-lg w-full">
+                <input [(ngModel)]='siteUrl' type="text" name="siteUrl" class="border-2 border-gray-900 p-2 rounded-lg w-full">
             </div>
 
             <div class="flex flex-col mt-2">
                 <label class="text-lg font-medium mb-2"> Site Image URL </label>
-                <input ngModel type="text" name="siteImgUrl" class="border-2 border-gray-900 p-2 rounded-lg w-full">
+                <input [(ngModel)]="siteImgUrl" type="text" name="siteImgUrl" class="border-2 border-gray-900 p-2 rounded-lg w-full">
             </div>
-            <button class="mt-10 mx-0.5 px-5 py-3 text-sm bg-gray-900 text-white shadow rounded-md">Add New Site</button>
+            <button class="mt-10 mx-0.5 px-5 py-3 text-sm bg-gray-900 text-white shadow rounded-md">{{formState}} Site</button>
             <button class="mt-10 mx-0.5 px-5 py-3 text-sm border-2 border-gray-900 text-gray-900 shadow rounded-md">Cancel</button>
         </form>
     </div>
 
     <div class="grid grid-cols-4 gap-5">
-        <div class="shadow-lg border-2 border-gray-900">
-            <img src="https://cdn.mos.cms.futurecdn.net/dcHyDicd7tuDEJX75NDoqV.jpeg" alt="">
-            <h3 class="p-3 text-xl font-bold"> GoDaddy.com </h3>
+        <div *ngFor="let site of allSites | async" class="shadow-lg border-2 border-gray-900">
+            <img [src]="site.siteImgUrl" alt="">
+            <h3 class="p-3 text-xl font-bold">{{site.siteName}}</h3>
             <div class="w-60 m-3 px-3 bg-blue-200 text-blue-800 rounded-lg text-sm">
-                https://godaddy.com
+                {{site.siteUrl}}
             </div>
 
             <button class="my-3 ml-3 mx-0.5 px-5 py-3 text-sm bg-gray-900 text-white shadow rounded-md">
                 Add New Password
             </button>
 
-            <button class="my-3 mx-0.5 px-5 py-3 text-sm border-2 border-gray-900 text-gray-900 shadow rounded-md">
+            <button (click)="editSite(site.siteName, site.siteUrl, site.siteImgUrl, site.id)" 
+            class="my-3 mx-0.5 px-5 py-3 text-sm border-2 border-gray-900 text-gray-900 shadow rounded-md">
                 Edit
             </button>
 
-            <button class="my-3 mx-0.5 px-5 py-3 text-sm border-2 border-gray-900 text-gray-900 shadow rounded-md">
+            <button (click)="deleteSite(site.id)" 
+             class="my-3 mx-0.5 px-5 py-3 text-sm border-2 border-gray-900 text-gray-900 shadow rounded-md">
                 Delete
             </button>
         </div>
